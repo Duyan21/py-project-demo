@@ -1,24 +1,38 @@
+{% load static %}
 <!DOCTYPE html>
 <html>
     <head>
         <title>Notes</title>
+        <link rel="stylesheet" href="{% static 'notes/style.css' %}">
     </head>
     <body>
         <h1>My Notes</h1>
         <form method="post">
             {% csrf_token %}
-            <textarea name="content" placeholder="Write your note"></textarea>
+            {{ form.as_p }}
             <br>
             <button type="submit">Save</button>
         </form>
 
         <h2>Notes</h2>
-        <ol>
-        {% for note in notes %}
-            <li>{{note.content}}</li>
-        {% empty %}
-            <li>No notes at the momment!</li>
-        {% endfor %}
-        </ol>
+        <table>
+            <tr>
+                <th>No.</th>
+                <th>Note</th>
+                <th>Status</th>
+                <th>Created date</th>
+            </tr>
+
+            {% for note in notes %}
+            <tr>
+            <td>{{ forloop.counter }}</td>
+            <td>{{ note.content }}</td>
+            <td>{{ note.status }}</td>
+            <td>{{ note.created_at }}</td>
+            </tr>
+            {% empty %}
+            <tr> <td colspan="4">No notes at the moment!</td> </tr>
+            {% endfor %}
+        </table>
     </body>
 </html>
