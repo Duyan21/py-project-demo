@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Notes</title>
+    </head>
+    <body>
+        <h1>My Notes</h1>
+        <form method="post">
+            {% csrf_token %}
+            <textarea name="content" placeholder="Write your note"></textarea>
+            <br>
+            <button type="submit">Save</button>
+        </form>
+
+        <h2>Notes</h2>
+        <ol>
+        {% for note in notes %}
+            <li>{{note.content}}</li>
+        {% empty %}
+            <li>No notes at the momment!</li>
+        {% endfor %}
+        </ol>
+    </body>
+</html>
