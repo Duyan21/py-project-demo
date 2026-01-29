@@ -1,3 +1,4 @@
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import redirect, render
 from django import forms
@@ -16,19 +17,19 @@ class LoginForm(forms.Form):
     username = forms.CharField(widget=forms.TextInput(attrs={"placeholder": "Username"}))
     password = forms.CharField(widget=forms.PasswordInput(attrs={"placeholder": "Password"}))
 
-
 def index(request):
     if request.method == "POST":
         Form = NoteForm(request.POST)
         if Form.is_valid():
+            user = request.user
             note = Form.cleaned_data["note"]
             status = Form.cleaned_data["status"]
-            Note.objects.create(content=note, status=status)
+            Note.objects.create(user=user, content=note, status=status)
         return redirect("index")
     else:
         Form = NoteForm()
 
-    notes = Note.objects.all()
+    notes = Note.objects.filter(user=request.user)
     return render(request, "notes/index.html", {
         "notes": notes,
         "form": Form,
