@@ -44,11 +44,14 @@ def login_view(request):
             password = form.cleaned_data["password"]
 
             user = authenticate(request, username=username, password=password)
-            if user:
+            if user and user.is_active:
                 login(request, user)
                 return redirect("index")
             else:
-                form.add_error(None, "Invalid credentials")
+                return render(request, "notes/login.html", {
+                    "message": "Invalid credentials or inactive account",
+                    "form": form
+                })
     else:
         form = LoginForm()
 
